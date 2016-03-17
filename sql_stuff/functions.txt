@@ -1,0 +1,39 @@
+
+create or replace function create_contact (e_name text, e_phone text, e_email text) returns SETOF contacts as $$
+BEGIN
+INSERT into contacts (name,phone,email) values (e_name,e_phone,e_email);
+
+RETURN QUERY
+SELECT * from contacts c where c.email = e_email;
+
+END
+$$ LANGUAGE plpgsql;
+
+
+create or replace function fetch_contacts (e_email text) returns SETOF contacts as $$
+BEGIN
+RETURN QUERY
+SELECT * from contacts c where c.email = e_email;
+
+END
+$$ LANGUAGE plpgsql;
+
+create or replace function delete_contact (e_email text) returns void as $$
+BEGIN
+DELETE from contacts WHERE email = e_email;
+
+END
+$$ LANGUAGE plpgsql;
+
+
+
+create or replace function update_contact (e_name text, e_phone text, e_email text) returns SETOF contacts as $$
+BEGIN
+UPDATE contacts SET name = e_name, phone = e_phone, email = e_email
+WHERE email = e_email;
+
+RETURN QUERY
+SELECT * from contacts c where c.email = e_email;
+
+END
+$$ LANGUAGE plpgsql;
